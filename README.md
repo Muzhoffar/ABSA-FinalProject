@@ -21,88 +21,60 @@ Tujuan penelitian ini adalah mengidentifikasi aspek-aspek yang dibicarakan pengg
 
 ---
 
-## 🗂️ Struktur Repository
+## 🧰 Tech Stack
 
-```
-absa-byu-reviews/
-│
-├── ABSA.ipynb              # Notebook utama (end-to-end pipeline)
-├── requirements.txt        # Daftar dependensi Python
-├── README.md
-│
-├── data/
-│   ├── data_raw.csv        # Data mentah hasil scraping (tidak di-push ke GitHub)
-│   ├── data_preprocessed.csv
-│   └── data_labeled.csv    # Data berlabel untuk training SVM
-│
-└── models/
-    └── *.joblib            # Model SVM tersimpan per aspek
-```
-
-> ⚠️ File `data/data_raw.csv` dan `models/*.joblib` tidak disertakan di repo ini karena ukuran file. Jalankan notebook dari awal untuk meregenerasinya.
-
----
-
-## 🔧 Metode & Tools
-
-| Tahap | Metode / Library |
+| Tahap | Library |
 |---|---|
 | Scraping | `google-play-scraper` |
-| Preprocessing | `Sastrawi`, `NLTK`, `re` |
-| Pemodelan Topik | `Gensim` (LDA, Coherence Score, pyLDAvis) |
-| Klasifikasi | `scikit-learn` (SVM, TF-IDF) |
-| Imbalanced Data | `imbalanced-learn` (SMOTE, SMOTEENN) |
+| Preprocessing | `PySastrawi`, `NLTK` |
+| Topic Modeling | `Gensim` (LDA, Coherence Score, pyLDAvis) |
+| Klasifikasi | `scikit-learn` (SVM, TF-IDF, GridSearchCV) |
+| Imbalanced Data | `imbalanced-learn` (SMOTE) |
 | Visualisasi | `matplotlib`, `seaborn`, `WordCloud`, `pyLDAvis` |
-
----
-
-## 🚀 Cara Menjalankan
-
-### 1. Clone repository
-```bash
-git clone https://github.com/<username>/absa-byu-reviews.git
-cd absa-byu-reviews
-```
-
-### 2. Install dependensi
-```bash
-pip install -r requirements.txt
-```
-
-### 3. Jalankan notebook
-```bash
-jupyter notebook ABSA.ipynb
-```
-
-> Pastikan folder `data/` tersedia dan berisi `data_raw.csv`. Jika belum ada, uncomment bagian scraping di **Section 2.1** pada notebook untuk mengambil data langsung dari Google Play Store.
 
 ---
 
 ## 📊 Hasil
 
-- **Aspek yang teridentifikasi (LDA):**
-  - Aspek 1: Aplikasi
-  - Aspek 2: Jaringan
-  - Aspek 3: Layanan/Paket
-
-- **Evaluasi model SVM** dilakukan menggunakan Stratified K-Fold Cross-Validation dengan metrik akurasi, precision, recall, dan F1-score per aspek.
-
----
-
-## 📦 Requirements
-
-Lihat [`requirements.txt`](requirements.txt) untuk daftar lengkap dependensi.
+### Aspek yang Teridentifikasi (LDA)
+Dari proses topic modeling, teridentifikasi **3 aspek utama**:
+- 🖥️ **Aspek Aplikasi** — performa, bug, update
+- 📶 **Aspek Jaringan** — sinyal, koneksi, kecepatan
+- 🛒 **Aspek Pembelian** — paket, harga, kuota
 
 ---
 
-## 📄 Lisensi
+### Optimasi Hyperparameter (Grid Search)
 
-Proyek ini menggunakan lisensi [MIT](LICENSE). Bebas digunakan untuk keperluan belajar dan referensi akademis.
+| Aspek | Kernel Terbaik | Nilai C | F1-Score Macro |
+|---|---|---|---|
+| Aplikasi | Linear | 0.1 | 0.8889 |
+| Jaringan | Linear | 0.1 | 0.8682 |
+| Pembelian | RBF | 10 | 0.9124 |
+
+Aspek Aplikasi dan Jaringan optimal dengan kernel **Linear**, menandakan data cenderung dapat dipisahkan secara linear. Aspek Pembelian membutuhkan kernel **RBF**, mengindikasikan pola yang lebih kompleks.
+
+---
+
+### Evaluasi Akhir Model (Rata-rata 5-Fold Cross Validation)
+
+| Aspek | Kelas | Precision | Recall | F1-Score | Accuracy |
+|---|---|---|---|---|---|
+| 🖥️ Aplikasi | Negatif | 0.9728 | 0.9720 | 0.9724 | **0.9516** |
+| | Positif | 0.8058 | 0.8076 | 0.8055 | |
+| 📶 Jaringan | Negatif | 0.9624 | 0.9573 | 0.9598 | **0.9319** |
+| | Positif | 0.7670 | 0.7885 | 0.7767 | |
+| 🛒 Pembelian | Negatif | 0.9317 | 0.9810 | 0.9557 | **0.9338** |
+| | Positif | 0.9413 | 0.8077 | 0.8691 | |
+
+Model secara konsisten lebih kuat mendeteksi ulasan **negatif** di semua aspek. Aspek **Pembelian** mencatatkan keseimbangan terbaik antara kelas negatif dan positif, sedangkan aspek **Aplikasi** mencapai akurasi tertinggi.
 
 ---
 
 ## 👤 Author
 
 **Rifqi Sirojul Muzhoffar**  
+📧 rmuzhoffar@gmail.com  
+🔗 [LinkedIn](https://linkedin.com/in/rifqi-sm) | [GitHub](https://github.com/Muzhoffar)
 📧 [rmuzhoffar@gmail.com]  
 🔗 [LinkedIn](https://linkedin.com/in/rifqi-sm) | [GitHub](https://github.com/Muzhoffar)
