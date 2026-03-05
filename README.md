@@ -76,5 +76,3 @@ Model secara konsisten lebih kuat mendeteksi ulasan **negatif** di semua aspek. 
 **Rifqi Sirojul Muzhoffar**  
 📧 rmuzhoffar@gmail.com  
 🔗 [LinkedIn](https://linkedin.com/in/rifqi-sm) | [GitHub](https://github.com/Muzhoffar)
-📧 [rmuzhoffar@gmail.com]  
-🔗 [LinkedIn](https://linkedin.com/in/rifqi-sm) | [GitHub](https://github.com/Muzhoffar)
